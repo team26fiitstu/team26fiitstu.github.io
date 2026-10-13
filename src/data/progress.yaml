@@ -1,0 +1,17 @@
+# semester: winter | summer; status: done | current | planned, one current
+
+- id: kickoff
+  semester: winter
+  week: 4
+  title:
+    en: Kickoff meeting with the supervisor
+    sk: Úvodné stretnutie s vedúcim
+  status: done
+
+- id: preparation
+  semester: winter
+  week: 5
+  title:
+    en: Preparatory phase
+    sk: Prípravná fáza
+  status: current

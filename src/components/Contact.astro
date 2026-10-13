@@ -1,0 +1,125 @@
+---
+import Figure from './Figure.astro';
+import { site } from '../site';
+import { useI18n } from '../i18n';
+
+const { locale, t } = useI18n(Astro.currentLocale);
+
+const { lat, lon } = site.location;
+const mapSrc = `https://www.google.com/maps?q=${lat},${lon}&z=16&hl=${locale}&output=embed`;
+---
+
+<div class="contact">
+  <div class="info">
+    <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+    <address>
+      <a class="mono soft" href={site.mapsUrl} target="_blank" rel="noopener">
+        {t('contact.address').split('\n').map((line) => <span>{line}</span>)}
+        <span class="open">{t('contact.openMap')} &#8599;</span>
+      </a>
+    </address>
+  </div>
+  <div class="map">
+    <Figure number="FIG_002">
+      <div class="view">
+        <iframe src={mapSrc} title={t('contact.mapTitle')} loading="lazy"></iframe>
+      </div>
+    </Figure>
+  </div>
+</div>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 4.5fr) minmax(0, 4.5fr);
+    gap: 40px 24px;
+  }
+
+  .info {
+    grid-column: 2;
+  }
+
+  .email {
+    font-family: var(--f-serif);
+    font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+    font-style: italic;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    text-decoration-color: var(--c-accent);
+    text-decoration-thickness: 2px;
+  }
+
+  address {
+    margin-top: 16px;
+    font-style: normal;
+  }
+
+  address a {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+  }
+
+  .open {
+    margin-top: 12px;
+    color: var(--c-accent);
+  }
+
+  address a:hover .open {
+    text-decoration: underline;
+  }
+
+  /* brand tint, original on hover */
+  .view {
+    position: relative;
+  }
+
+  .view::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--c-accent);
+    mix-blend-mode: color;
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border: 0;
+    filter: grayscale(1) opacity(0.85);
+    transition: filter 0.3s ease;
+  }
+
+  .view:hover::after {
+    opacity: 0;
+  }
+
+  .view:hover iframe {
+    filter: none;
+  }
+
+  @media (max-width: 960px) {
+    .contact {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    }
+
+    .map {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+
+    .info,
+    .map {
+      grid-column: 1;
+    }
+  }
+</style>

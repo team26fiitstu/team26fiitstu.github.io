@@ -1,0 +1,66 @@
+---
+import Ruler from './Ruler.astro';
+
+interface Props {
+  id: string;
+  index: number;
+  label: string;
+  titleA: string;
+  titleB?: string;
+  intro?: string;
+}
+
+const { id, index, label, titleA, titleB, intro } = Astro.props;
+const number = String(index).padStart(2, '0');
+---
+
+<section class="section" id={id} aria-labelledby={`${id}-title`}>
+  <div class="wrap">
+    <Ruler label={`${number} / ${label}`} />
+    <header class="head">
+      <p class="mono num" aria-hidden="true"><span>{number}</span></p>
+      <div>
+        <h2 id={`${id}-title`}>{titleA}{titleB && <em>{titleB}</em>}</h2>
+        {intro && <p class="intro soft">{intro}</p>}
+      </div>
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-top: var(--space-section);
+  }
+
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: 24px;
+    margin: clamp(32px, 4vw, 56px) 0 clamp(40px, 5vw, 64px);
+  }
+
+  .num span {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid var(--c-ink);
+  }
+
+  h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .intro {
+    max-width: 38em;
+    margin-top: 20px;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 720px) {
+    .head {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+</style>

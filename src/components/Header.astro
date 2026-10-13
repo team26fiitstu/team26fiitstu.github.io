@@ -1,0 +1,165 @@
+---
+import { Image } from 'astro:assets';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import logo from '../assets/logos/horizontal.png';
+import { locales, useI18n } from '../i18n';
+
+const { locale, t } = useI18n(Astro.currentLocale);
+
+const links = (['progress', 'reports', 'documents', 'team', 'contact'] as const).map((id) => [id, t(`nav.${id}`)]);
+---
+
+<header class="header">
+  <div class="wrap bar">
+    <a class="logo" href={getRelativeLocaleUrl(locale)}>
+      <Image src={logo} alt="NAOMI" height={36} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav class="nav" id="nav" aria-label={t('nav.label')}>
+      <ul>
+        {links.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="tools">
+      <ul class="lang mono" aria-label={t('nav.language')}>
+        {
+          locales.map((l) => (
+            <li>
+              <a href={getRelativeLocaleUrl(l)} hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>
+                {l}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <button class="menu mono" type="button" aria-controls="nav" aria-expanded="false">
+        {t('nav.menu')}
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.header')!;
+  const button = header.querySelector<HTMLButtonElement>('.menu')!;
+
+  const setOpen = (open: boolean) => {
+    header.classList.toggle('open', open);
+    button.setAttribute('aria-expanded', String(open));
+  };
+
+  button.addEventListener('click', () => setOpen(!header.classList.contains('open')));
+  header.querySelectorAll('.nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--c-bg) 90%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: var(--header-h);
+  }
+
+  .logo img {
+    width: auto;
+    height: 36px;
+  }
+
+  .nav {
+    margin-left: auto;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 28px;
+  }
+
+  .nav a {
+    font-family: var(--f-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .lang {
+    display: flex;
+    border: 1px solid var(--c-line);
+  }
+
+  .lang a {
+    display: block;
+    padding: 4px 9px;
+    text-decoration: none;
+    color: var(--c-ink-faint);
+  }
+
+  .lang li + li {
+    border-left: 1px solid var(--c-line);
+  }
+
+  .lang a[aria-current] {
+    background: var(--c-ink);
+    color: var(--c-bg);
+  }
+
+  .menu {
+    display: none;
+    padding: 5px 10px;
+    border: 1px solid var(--c-ink);
+    background: none;
+    color: var(--c-ink);
+    cursor: pointer;
+  }
+
+  @media (max-width: 860px) {
+    .tools {
+      margin-left: auto;
+    }
+
+    .menu {
+      display: block;
+    }
+
+    .nav {
+      position: absolute;
+      inset: var(--header-h) 0 auto;
+      display: none;
+      background: var(--c-bg);
+      border-bottom: 1px solid var(--c-line);
+    }
+
+    .header.open .nav {
+      display: block;
+    }
+
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+      padding: 8px var(--gutter) 16px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 12px 0;
+      font-size: 1.125rem;
+      border-bottom: 1px solid var(--c-line);
+    }
+  }
+</style>

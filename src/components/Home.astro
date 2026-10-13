@@ -1,0 +1,94 @@
+---
+import { getOrdered } from '../lib/collections';
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Section from './Section.astro';
+import Progress from './Progress.astro';
+import DocList, { type DocItem } from './DocList.astro';
+import Team from './Team.astro';
+import Contact from './Contact.astro';
+import { useI18n } from '../i18n';
+
+const { locale, t } = useI18n(Astro.currentLocale);
+
+type Entry = { title: Record<typeof locale, string>; date?: Date; file?: string };
+
+function groupBy<E extends Entry, K extends string>(entries: E[], kinds: readonly K[], kindOf: (e: E) => K) {
+  return kinds
+    .map((kind) => ({
+      kind,
+      items: entries.filter((e) => kindOf(e) === kind).map((e): DocItem => ({ ...e, title: e.title[locale] })),
+    }))
+    .filter((group) => group.items.length > 0);
+}
+
+// newest first, undated last
+const reports = (await getOrdered('reports'))
+  .map(({ data }) => data)
+  .sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
+const documents = (await getOrdered('documents')).map(({ data }) => data);
+
+const reportGroups = groupBy(reports, ['sprint', 'meeting', 'other'], (r) => r.kind);
+const documentGroups = groupBy(documents, ['methodology', 'analysis', 'deliverable'], (d) => d.group);
+---
+
+<Base>
+  <Hero />
+
+  <Section
+    id="progress"
+    index={1}
+    label={t('progress.label')}
+    titleA={t('progress.titleA')}
+    titleB={t('progress.titleB')}
+    intro={t('progress.intro')}
+  >
+    <Progress />
+  </Section>
+
+  <Section id="archive" index={2} label={t('archive.label')} titleA={t('archive.titleA')} titleB={t('archive.titleB')}>
+    <div class="archive">
+      <div id="reports">
+        <h3 class="col-title">{t('reports.title')}</h3>
+        <p class="soft col-intro">{t('reports.intro')}</p>
+        {reportGroups.map((g) => <DocList heading={t(`reports.${g.kind}`)} items={g.items} />)}
+        {reportGroups.length === 0 && <p class="soft">{t('reports.empty')}</p>}
+      </div>
+      <div id="documents">
+        <h3 class="col-title">{t('documents.title')}</h3>
+        <p class="soft col-intro">{t('documents.intro')}</p>
+        {documentGroups.map((g) => <DocList heading={t(`documents.${g.kind}`)} items={g.items} />)}
+      </div>
+    </div>
+  </Section>
+
+  <Section id="team" index={3} label={t('team.label')} titleA={t('team.titleA')} titleB={t('team.titleB')}>
+    <Team />
+  </Section>
+
+  <Section id="contact" index={4} label={t('contact.label')} titleA={t('contact.titleA')} titleB={t('contact.titleB')}>
+    <Contact />
+  </Section>
+</Base>
+
+<style>
+  .archive {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px clamp(40px, 6vw, 96px);
+  }
+
+  .col-title {
+    font-size: 1.5rem;
+  }
+
+  .col-intro {
+    margin: 8px 0 32px;
+  }
+
+  @media (max-width: 860px) {
+    .archive {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

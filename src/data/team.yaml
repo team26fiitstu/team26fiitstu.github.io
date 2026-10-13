@@ -1,0 +1,43 @@
+# display order = file order; photo: public/team/, 4:5
+
+- id: perdek
+  titleBefore: Ing.
+  name: Jakub
+  surname: Perdek
+  titleAfter: PhD.
+  role: { en: Product Owner, sk: Product Owner }
+
+- id: gainetdinov
+  name: Ruslan
+  surname: Gainetdinov
+  role: { en: Team Lead, sk: Vedúci tímu }
+
+- id: akhmadinurov
+  name: Amal
+  surname: Akhmadinurov
+  role: { en: ML/AI Engineer, sk: ML/AI Engineer }
+
+- id: dmitriev
+  name: Anton
+  surname: Dmitriev
+  role: { en: Software Engineer, sk: Software Engineer }
+
+- id: danilov
+  name: Denis
+  surname: Danilov
+  role: { en: Software Engineer, sk: Software Engineer }
+
+- id: kuzin
+  name: Timofei
+  surname: Kuzin
+  role: { en: Lab Test Engineer, sk: Lab Test Engineer }
+
+- id: tikhoblazhenko
+  name: Alena
+  surname: Tikhoblazhenko
+  role: { en: Data Engineer, sk: Data Engineer }
+
+- id: zimnitski
+  name: Aliaksei
+  surname: Zimnitski
+  role: { en: DevOps Engineer, sk: DevOps Engineer }

@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "title": "NAOMI: Team 26, FIIT STU",
+    "description": "Team 26 at FIIT STU, Team Project course 2026/2027. We continue the development of a system that transfers human movement from video to the humanoid robot NAO."
+  },
+  "nav": {
+    "label": "Main",
+    "progress": "Progress",
+    "reports": "Reports",
+    "documents": "Documents",
+    "team": "Team",
+    "contact": "Contact",
+    "menu": "Menu",
+    "language": "Language"
+  },
+  "hero": {
+    "titleA": "Team project",
+    "titleB": "with the NAO robot.",
+    "lead": "NAOMI (NAO Motion Imitation) is the project of Team 26 in the Team Project course, academic year 2026/2027, at the Faculty of Informatics and Information Technologies STU in Bratislava. It is a system that captures human movement from video and transfers it to the humanoid robot NAO. We are the team continuing its development.",
+    "imageAlt": "Line drawing of a person and a robot with matching joints."
+  },
+  "progress": {
+    "label": "Progress",
+    "titleA": "Where we",
+    "titleB": "are now.",
+    "intro": "We combine Scrum and Kanban. Work is planned in sprints that end with a review and a retrospective, while everyday tasks move across a shared Kanban board. Each sprint is summarised in a report below.",
+    "done": "Done",
+    "current": "In progress",
+    "planned": "Planned",
+    "winter": "Winter semester",
+    "summer": "Summer semester",
+    "week": "week {n}"
+  },
+  "archive": {
+    "label": "Reports & documents",
+    "titleA": "Everything",
+    "titleB": "we write down."
+  },
+  "reports": {
+    "title": "Reports",
+    "intro": "Sprint reports and meeting minutes.",
+    "sprint": "Sprint",
+    "meeting": "Meeting",
+    "other": "Other",
+    "pending": "Pending",
+    "empty": "Nothing here yet."
+  },
+  "documents": {
+    "title": "Documents",
+    "intro": "Methodologies we follow, analyses and project deliverables.",
+    "methodology": "Methodologies",
+    "analysis": "Analyses",
+    "deliverable": "Deliverables"
+  },
+  "team": {
+    "label": "Team",
+    "titleA": "The people",
+    "titleB": "behind the project."
+  },
+  "contact": {
+    "label": "Contact",
+    "titleA": "Write",
+    "titleB": "to us.",
+    "address": "Faculty of Informatics and Information Technologies\nSlovak University of Technology in Bratislava\nIlkovičova 2, 842 16 Bratislava\nSlovakia",
+    "openMap": "Open in maps",
+    "mapTitle": "Map showing FIIT STU, Ilkovičova 2, Bratislava"
+  },
+  "footer": {
+    "team": "Team",
+    "top": "Back to top"
+  }
+}

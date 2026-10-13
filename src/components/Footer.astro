@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import icon from '../assets/logos/icon.png';
+import fiit from '../assets/logos/fiit.svg';
+import { site } from '../site';
+import { useI18n } from '../i18n';
+
+const { t } = useI18n(Astro.currentLocale);
+---
+
+<footer class="footer">
+  <div class="wrap row">
+    <span class="mono faint">&copy; {new Date().getFullYear()} {t('footer.team')} {site.team}, FIIT STU</span>
+    <div class="lockup">
+      <a href={site.github} rel="noopener">
+        <Image src={icon} alt="NAOMI on GitHub" height={36} densities={[1, 2]} />
+      </a>
+      <a href={site.faculty} rel="noopener">
+        <Image src={fiit} alt="STU FIIT" height={32} />
+      </a>
+    </div>
+    <a class="mono faint top" href="#top">{t('footer.top')} &uarr;</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--space-section);
+    border-top: 1px solid var(--c-line);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding-block: 28px;
+  }
+
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .lockup img {
+    width: auto;
+    height: 36px;
+  }
+
+  .lockup a:last-child img {
+    height: 32px;
+  }
+
+  .top {
+    justify-self: end;
+    text-decoration: none;
+  }
+
+  @media (max-width: 720px) {
+    .row {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .lockup {
+      order: -1;
+    }
+
+    .top {
+      justify-self: center;
+    }
+  }
+</style>

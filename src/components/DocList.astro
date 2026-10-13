@@ -1,0 +1,98 @@
+---
+import { useI18n } from '../i18n';
+
+export interface DocItem {
+  title: string;
+  date?: Date;
+  file?: string;
+}
+
+interface Props {
+  heading: string;
+  items: DocItem[];
+}
+
+const { heading, items } = Astro.props;
+const { t } = useI18n(Astro.currentLocale);
+
+const href = (file: string) => (/^https?:\/\//.test(file) ? file : `${import.meta.env.BASE_URL}${file}`);
+const isoDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<div class="group">
+  <h3 class="mono">{heading}<span class="faint">{String(items.length).padStart(2, '0')}</span></h3>
+  <ul>
+    {
+      items.map((item) => (
+        <li class:list={{ pending: !item.file }}>
+          {item.file ? (
+            <a class="title" href={href(item.file)} target="_blank" rel="noopener">
+              {item.title}
+            </a>
+          ) : (
+            <span class="title">{item.title}</span>
+          )}
+          <span class="leader" aria-hidden="true" />
+          <span class="mono meta">
+            {!item.file && <span class="faint">{t('reports.pending')}</span>}
+            {item.date && <time datetime={isoDate(item.date)}>{isoDate(item.date)}</time>}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .group + .group {
+    margin-top: 40px;
+  }
+
+  h3 {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--c-ink);
+    font-family: var(--f-mono);
+    font-size: var(--fs-mono);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-block: 9px;
+  }
+
+  .title {
+    line-height: 1.4;
+  }
+
+  a.title {
+    text-decoration: none;
+  }
+
+  a.title:hover {
+    text-decoration: underline;
+  }
+
+  .pending .title {
+    color: var(--c-ink-soft);
+  }
+
+  .leader {
+    flex: 1;
+    min-width: 24px;
+    border-bottom: 1px dotted var(--c-ink-faint);
+    transform: translateY(-4px);
+  }
+
+  .meta {
+    display: flex;
+    gap: 12px;
+    white-space: nowrap;
+  }
+</style>

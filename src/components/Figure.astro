@@ -1,0 +1,28 @@
+---
+interface Props {
+  number: string;
+}
+
+const { number } = Astro.props;
+---
+
+<figure class="sheet paper corners">
+  <span class="mono faint edge" aria-hidden="true">{number}</span>
+  <slot />
+</figure>
+
+<style>
+  .sheet {
+    height: 100%;
+    padding: clamp(28px, 4vw, 48px);
+  }
+
+  .edge {
+    position: absolute;
+    top: 24px;
+    left: 12px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.6875rem;
+  }
+</style>

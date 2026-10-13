@@ -1,0 +1,156 @@
+---
+import { getOrdered } from '../lib/collections';
+import { useI18n } from '../i18n';
+
+const { locale, t } = useI18n(Astro.currentLocale);
+const milestones = await getOrdered('progress');
+---
+
+<ol class="timeline" tabindex="0">
+  {
+    milestones.map(({ data }) => (
+      <li class={data.status} aria-current={data.status === 'current' ? 'step' : undefined}>
+        <span class="node" aria-hidden="true" />
+        <p class="mono meta">
+          <span>{t(`progress.${data.semester}`)}</span>
+          <span class="faint">{t('progress.week', { n: data.week })}</span>
+        </p>
+        <h3>{data.title[locale]}</h3>
+        <p class="mono status">{t(`progress.${data.status}`)}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<script>
+  // start at current milestone
+  document.querySelectorAll<HTMLElement>('.timeline').forEach((track) => {
+    const current = track.querySelector<HTMLElement>('[aria-current]');
+    if (current && track.scrollWidth > track.clientWidth) {
+      track.scrollLeft = current.offsetLeft - track.offsetLeft;
+    }
+  });
+</script>
+
+<style>
+  /* 5 per row, scroll beyond */
+  .timeline {
+    display: grid;
+    grid-auto-columns: minmax(220px, 20%);
+    grid-auto-flow: column;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    padding-bottom: 16px;
+  }
+
+  .timeline:focus-visible {
+    outline-offset: 8px;
+  }
+
+  li {
+    position: relative;
+    scroll-snap-align: start;
+    padding: 36px 24px 0 0;
+  }
+
+  li::before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--c-ink);
+  }
+
+  li.planned::before {
+    border-top-style: dashed;
+    border-color: var(--c-ink-faint);
+  }
+
+  .node {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--c-bg);
+    border: 1px solid var(--c-ink-faint);
+  }
+
+  .done .node {
+    background: var(--c-ink);
+    border-color: var(--c-ink);
+  }
+
+  .current .node {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 5px var(--c-accent-tint);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 12px;
+  }
+
+  h3 {
+    margin-top: 10px;
+    font-size: var(--fs-h3);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .planned h3 {
+    color: var(--c-ink-soft);
+    font-weight: 500;
+  }
+
+  .status {
+    margin-top: 10px;
+    color: var(--c-ink-faint);
+  }
+
+  .current .status {
+    color: var(--c-accent);
+  }
+
+  @media (max-width: 860px) {
+    .timeline {
+      grid-auto-flow: row;
+      overflow-x: visible;
+      padding-bottom: 0;
+    }
+
+    li {
+      padding: 0 0 32px 40px;
+    }
+
+    li::before {
+      top: 0;
+      bottom: 0;
+      left: 7px;
+      right: auto;
+      border-top: 0;
+      border-left: 1px solid var(--c-ink);
+    }
+
+    li.planned::before {
+      border-left-style: dashed;
+    }
+
+    li:last-child::before {
+      display: none;
+    }
+
+    h3 {
+      margin-top: 4px;
+    }
+
+    .status {
+      margin-top: 4px;
+    }
+  }
+</style>

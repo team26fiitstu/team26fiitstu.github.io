@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "title": "NAOMI: Tím 26, FIIT STU",
+    "description": "Tím 26 na FIIT STU, predmet Tímový projekt 2026/2027. Pokračujeme vo vývoji systému, ktorý prenáša pohyb človeka z videa na humanoidného robota NAO."
+  },
+  "nav": {
+    "label": "Hlavná navigácia",
+    "progress": "Priebeh",
+    "reports": "Správy",
+    "documents": "Dokumenty",
+    "team": "Tím",
+    "contact": "Kontakt",
+    "menu": "Menu",
+    "language": "Jazyk"
+  },
+  "hero": {
+    "titleA": "Tímový projekt",
+    "titleB": "s robotom NAO.",
+    "lead": "NAOMI (NAO Motion Imitation) je projekt tímu 26 v rámci predmetu Tímový projekt v akademickom roku 2026/2027 na Fakulte informatiky a informačných technológií STU v Bratislave. Je to systém, ktorý zachytáva pohyb človeka z videa a prenáša ho na humanoidného robota NAO. Sme tím, ktorý pokračuje v jeho vývoji.",
+    "imageAlt": "Kresba človeka a robota so zodpovedajúcimi kĺbmi."
+  },
+  "progress": {
+    "label": "Priebeh",
+    "titleA": "Kde",
+    "titleB": "práve sme.",
+    "intro": "Kombinujeme Scrum a Kanban. Prácu plánujeme v šprintoch, ktoré končia prehliadkou a retrospektívou, a bežné úlohy sledujeme na spoločnej kanbanovej tabuli. Každý šprint zhrnieme v správe nižšie.",
+    "done": "Hotovo",
+    "current": "Prebieha",
+    "planned": "Plánované",
+    "winter": "Zimný semester",
+    "summer": "Letný semester",
+    "week": "{n}. týždeň"
+  },
+  "archive": {
+    "label": "Správy a dokumenty",
+    "titleA": "Všetko,",
+    "titleB": "čo si zapíšeme."
+  },
+  "reports": {
+    "title": "Správy",
+    "intro": "Správy zo šprintov a zápisnice zo stretnutí.",
+    "sprint": "Šprint",
+    "meeting": "Stretnutie",
+    "other": "Iné",
+    "pending": "Pripravujeme",
+    "empty": "Zatiaľ tu nič nie je."
+  },
+  "documents": {
+    "title": "Dokumenty",
+    "intro": "Metodiky, ktorými sa riadime, analýzy a výstupy projektu.",
+    "methodology": "Metodiky",
+    "analysis": "Analýzy",
+    "deliverable": "Výstupy"
+  },
+  "team": {
+    "label": "Tím",
+    "titleA": "Ľudia",
+    "titleB": "za projektom."
+  },
+  "contact": {
+    "label": "Kontakt",
+    "titleA": "Napíšte",
+    "titleB": "nám.",
+    "address": "Fakulta informatiky a informačných technológií\nSlovenská technická univerzita v Bratislave\nIlkovičova 2, 842 16 Bratislava\nSlovensko",
+    "openMap": "Otvoriť v mapách",
+    "mapTitle": "Mapa s polohou FIIT STU, Ilkovičova 2, Bratislava"
+  },
+  "footer": {
+    "team": "Tím",
+    "top": "Späť hore"
+  }
+}

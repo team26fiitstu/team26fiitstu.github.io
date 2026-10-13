@@ -1,0 +1,77 @@
+---
+import Figure from './Figure.astro';
+// ?url keeps gif animated
+import motion from '../assets/figures/motion.gif?url';
+import { useI18n } from '../i18n';
+
+const { t } = useI18n(Astro.currentLocale);
+---
+
+<section class="hero wrap">
+  <div>
+    <h1>{t('hero.titleA')} <em>{t('hero.titleB')}</em></h1>
+    <p class="lead">{t('hero.lead')}</p>
+  </div>
+
+  <div class="art">
+    <div class="fit">
+      <Figure number="FIG_001">
+        <img src={motion} alt={t('hero.imageAlt')} width="1536" height="1024" fetchpriority="high" />
+      </Figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
+    gap: clamp(32px, 5vw, 72px);
+    padding-block: clamp(40px, 7vw, 96px) 0;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+  }
+
+  h1 em {
+    color: var(--c-accent);
+  }
+
+  .lead {
+    max-width: 34em;
+    margin-top: 28px;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+  }
+
+  /* drawing matches text height */
+  .art {
+    position: relative;
+  }
+
+  .fit {
+    position: absolute;
+    inset: 0;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 960px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .fit {
+      position: static;
+    }
+
+    img {
+      height: auto;
+    }
+  }
+</style>
