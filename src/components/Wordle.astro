@@ -1,0 +1,445 @@
+---
+// hidden game, opened from footer
+const layouts = {
+  en: ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'],
+  ru: ['йцукенгшщзхъ', 'фывапролджэ', 'ячсмитьбю'],
+};
+---
+
+<div class="drawer" id="wordle" inert>
+  <div class="inner">
+    <div class="game">
+      <div class="lang mono">
+        {
+          Object.keys(layouts).map((lang) => (
+            <button data-lang={lang} type="button" aria-pressed={String(lang === 'en')}>
+              {lang}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="board">
+        {
+          Array.from({ length: 6 }, () => (
+            <div class="row">
+              {Array.from({ length: 5 }, () => (
+                <span class="tile" />
+              ))}
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="message mono" aria-live="polite"></p>
+
+      {
+        Object.entries(layouts).map(([lang, rows]) => (
+          <div class="keyboard" data-lang={lang} hidden={lang !== 'en'}>
+            {rows.map((row, i) => (
+              <div class="keys">
+                {i === 2 && (
+                  <button class="key wide mono" data-key="enter" type="button">
+                    enter
+                  </button>
+                )}
+                {[...row].map((k) => (
+                  <button class="key mono" data-key={k} type="button">
+                    {k}
+                  </button>
+                ))}
+                {i === 2 && (
+                  <button class="key wide mono" data-key="backspace" type="button" aria-label="backspace">
+                    &larr;
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  type Mark = 'correct' | 'present' | 'absent';
+  type Lang = 'en' | 'ru';
+
+  const rank: Record<Mark, number> = { absent: 0, present: 1, correct: 2 };
+
+  // words load on demand, per language
+  const sources: Record<Lang, () => Promise<{ default: string }[]>> = {
+    en: () => Promise.all([import('../data/wordle/en/answers.txt?raw'), import('../data/wordle/en/allowed.txt?raw')]),
+    ru: () => Promise.all([import('../data/wordle/ru/answers.txt?raw'), import('../data/wordle/ru/allowed.txt?raw')]),
+  };
+
+  const texts: Record<Lang, Record<'short' | 'unknown' | 'win' | 'next', string>> = {
+    en: { short: 'not enough letters', unknown: 'not in word list', win: 'got it', next: 'enter for next' },
+    ru: { short: 'мало букв', unknown: 'нет в словаре', win: 'угадал', next: 'enter для следующего' },
+  };
+
+  // physical key positions, so ru works on an en layout and back
+  const codeRows = ['QWERTYUIOP[]', "ASDFGHJKL;'", 'ZXCVBNM,.'];
+  const codeName: Record<string, string> = {
+    '[': 'BracketLeft',
+    ']': 'BracketRight',
+    ';': 'Semicolon',
+    "'": 'Quote',
+    ',': 'Comma',
+    '.': 'Period',
+  };
+
+  const drawer = document.getElementById('wordle')!;
+  const rows = [...drawer.querySelectorAll<HTMLElement>('.row')];
+  const message = drawer.querySelector('.message')!;
+  const langButtons = [...drawer.querySelectorAll<HTMLButtonElement>('.lang button')];
+  const keyboards = [...drawer.querySelectorAll<HTMLElement>('.keyboard')];
+  const keys = new Map<string, HTMLButtonElement>();
+  const byCode: Record<string, Map<string, string>> = {};
+  const letters: Record<string, Set<string>> = {};
+
+  for (const board of keyboards) {
+    const codes = (byCode[board.dataset.lang!] = new Map());
+    const set = (letters[board.dataset.lang!] = new Set());
+    board.querySelectorAll('.keys').forEach((row, r) => {
+      row.querySelectorAll<HTMLButtonElement>('.key:not(.wide)').forEach((key, i) => {
+        const c = codeRows[r][i];
+        codes.set(codeName[c] ?? `Key${c}`, key.dataset.key!);
+        keys.set(key.dataset.key!, key);
+        set.add(key.dataset.key!);
+      });
+    });
+  }
+
+  const words: Partial<Record<Lang, { answers: string[]; valid: Set<string> }>> = {};
+  let lang: Lang = 'en';
+  let answer = '';
+  let guess = '';
+  let row = 0;
+  let over = false;
+
+  try {
+    if (localStorage.getItem('naomi-wordle-lang') === 'ru') lang = 'ru';
+  } catch {}
+
+  async function loadWords() {
+    if (words[lang]) return;
+    const [a, b] = await sources[lang]();
+    const answers = a.default.split('\n').filter(Boolean);
+    words[lang] = { answers, valid: new Set([...answers, ...b.default.split('\n').filter(Boolean)]) };
+  }
+
+  function say(text: string) {
+    message.textContent = text;
+  }
+
+  // two passes so repeated letters are marked like the original
+  function score(word: string): Mark[] {
+    const marks: Mark[] = Array(5).fill('absent');
+    const left: Record<string, number> = {};
+    for (let i = 0; i < 5; i++) {
+      if (word[i] === answer[i]) marks[i] = 'correct';
+      else left[answer[i]] = (left[answer[i]] ?? 0) + 1;
+    }
+    for (let i = 0; i < 5; i++) {
+      if (marks[i] !== 'correct' && left[word[i]]) {
+        marks[i] = 'present';
+        left[word[i]]--;
+      }
+    }
+    return marks;
+  }
+
+  function paint() {
+    [...rows[row].children].forEach((tile, i) => {
+      tile.textContent = guess[i] ?? '';
+      tile.classList.toggle('filled', i < guess.length);
+    });
+  }
+
+  function shake() {
+    rows[row].classList.remove('shake');
+    void rows[row].offsetWidth;
+    rows[row].classList.add('shake');
+  }
+
+  async function newGame() {
+    answer = '';
+    await loadWords();
+    const { answers } = words[lang]!;
+    answer = answers[Math.floor(Math.random() * answers.length)];
+    guess = '';
+    row = 0;
+    over = false;
+    for (const tile of drawer.querySelectorAll('.tile')) {
+      tile.textContent = '';
+      tile.className = 'tile';
+    }
+    for (const key of keys.values()) delete key.dataset.mark;
+    say('');
+  }
+
+  function setLang(next: Lang) {
+    lang = next;
+    for (const b of langButtons) b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+    for (const k of keyboards) k.hidden = k.dataset.lang !== lang;
+    try {
+      localStorage.setItem('naomi-wordle-lang', lang);
+    } catch {}
+    newGame();
+  }
+
+  function submit() {
+    const t = texts[lang];
+    if (guess.length < 5) return (say(t.short), shake());
+    if (!words[lang]!.valid.has(guess)) return (say(t.unknown), shake());
+
+    const marks = score(guess);
+    [...rows[row].children].forEach((tile, i) => {
+      (tile as HTMLElement).style.animationDelay = `${i * 120}ms`;
+      tile.classList.add('reveal', marks[i]);
+    });
+    [...guess].forEach((letter, i) => {
+      const key = keys.get(letter)!;
+      const prev = key.dataset.mark as Mark | undefined;
+      if (!prev || rank[marks[i]] > rank[prev]) key.dataset.mark = marks[i];
+    });
+
+    const win = guess === answer;
+    row++;
+    guess = '';
+    over = win || row === 6;
+    say(over ? `${win ? t.win : answer}, ${t.next}` : '');
+  }
+
+  function press(key: string) {
+    if (!answer) return;
+    if (over) return key === 'enter' && newGame();
+    if (key === 'enter') return submit();
+    if (key === 'backspace') guess = guess.slice(0, -1);
+    else if (letters[lang].has(key) && guess.length < 5) guess += key;
+    else return;
+    say('');
+    paint();
+  }
+
+  async function toggle() {
+    const open = drawer.classList.toggle('open');
+    drawer.inert = !open;
+    if (!open) return;
+    // scroll once the drawer has expanded
+    setTimeout(() => drawer.scrollIntoView({ behavior: 'smooth', block: 'end' }), 420);
+    if (!answer) setLang(lang);
+  }
+
+  for (const b of langButtons) {
+    b.addEventListener('click', () => {
+      b.blur();
+      if (b.dataset.lang !== lang) setLang(b.dataset.lang as Lang);
+    });
+  }
+
+  for (const board of keyboards) {
+    board.addEventListener('click', (e) => {
+      const key = (e.target as HTMLElement).closest<HTMLButtonElement>('.key');
+      if (!key) return;
+      key.blur();
+      press(key.dataset.key!);
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (!drawer.classList.contains('open') || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === 'Enter' || e.key === 'Backspace') {
+      e.preventDefault();
+      return press(e.key.toLowerCase());
+    }
+    const letter = byCode[lang].get(e.code);
+    if (letter) press(letter);
+  });
+
+  window.addEventListener('wordle:toggle', toggle);
+</script>
+
+<style>
+  .drawer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 400ms ease;
+  }
+
+  .drawer.open {
+    grid-template-rows: 1fr;
+  }
+
+  .inner {
+    overflow: hidden;
+  }
+
+  .game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 520px;
+    margin-inline: auto;
+    padding: 8px var(--gutter) 40px;
+  }
+
+  .board {
+    display: grid;
+    gap: 6px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .tile {
+    display: grid;
+    place-items: center;
+    /* fit board and keyboard on a phone screen */
+    width: clamp(36px, min(13vw, 6.5dvh), 60px);
+    aspect-ratio: 1;
+    border: 1px solid var(--c-line);
+    background: var(--c-bg);
+    font-family: var(--f-sans);
+    font-size: clamp(1.25rem, 3.5dvh, 1.75rem);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .tile.filled {
+    border-color: var(--c-ink-faint);
+  }
+
+  .tile.reveal {
+    animation: flip 400ms ease both;
+  }
+
+  .correct,
+  .key[data-mark='correct'] {
+    --mark-bg: var(--c-accent);
+    --mark-fg: var(--c-bg);
+  }
+
+  .present,
+  .key[data-mark='present'] {
+    --mark-bg: color-mix(in srgb, var(--c-accent) 30%, var(--c-bg));
+    --mark-fg: var(--c-ink);
+  }
+
+  .absent,
+  .key[data-mark='absent'] {
+    --mark-bg: color-mix(in srgb, var(--c-ink) 20%, var(--c-bg));
+    --mark-fg: var(--c-ink-soft);
+  }
+
+  @keyframes flip {
+    50% {
+      transform: rotateX(90deg);
+    }
+    51%,
+    100% {
+      border-color: transparent;
+      background: var(--mark-bg);
+      color: var(--mark-fg);
+    }
+  }
+
+  /* global reduced motion kills the flip */
+  @media (prefers-reduced-motion: reduce) {
+    .tile.reveal {
+      border-color: transparent;
+      background: var(--mark-bg);
+      color: var(--mark-fg);
+    }
+  }
+
+  .shake {
+    animation: shake 300ms;
+  }
+
+  @keyframes shake {
+    25% {
+      transform: translateX(-6px);
+    }
+    75% {
+      transform: translateX(6px);
+    }
+  }
+
+  .message {
+    min-height: 1.5em;
+    color: var(--c-accent);
+    text-align: center;
+  }
+
+  .lang {
+    display: flex;
+  }
+
+  .lang button {
+    padding: 4px 10px;
+    border: 1px solid var(--c-line);
+    background: none;
+    color: var(--c-ink-faint);
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+
+  .lang button[aria-pressed='true'] {
+    border-color: var(--c-ink);
+    background: var(--c-ink);
+    color: var(--c-bg);
+  }
+
+  .keyboard {
+    display: grid;
+    gap: 6px;
+    align-self: stretch;
+  }
+
+  .keyboard[hidden] {
+    display: none;
+  }
+
+  .keys {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .key {
+    flex: 0 1 44px;
+    min-width: 0;
+    height: clamp(44px, 6.5dvh, 54px);
+    padding: 0;
+    border: 1px solid var(--c-line);
+    background: var(--c-bg);
+    color: var(--c-ink);
+    font-size: 0.875rem;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .key:hover {
+    border-color: var(--c-ink-faint);
+  }
+
+  .key.wide {
+    flex-basis: 68px;
+    font-size: var(--fs-mono);
+  }
+
+  .key[data-mark] {
+    border-color: transparent;
+    background: var(--mark-bg);
+    color: var(--mark-fg);
+  }
+</style>

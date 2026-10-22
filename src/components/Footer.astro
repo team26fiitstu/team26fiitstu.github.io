@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import icon from '../assets/logos/icon.png';
 import fiit from '../assets/logos/fiit.svg';
 import { site } from '../site';
+import Wordle from './Wordle.astro';
 import { useI18n } from '../i18n';
 
 const { t } = useI18n(Astro.currentLocale);
@@ -10,7 +11,7 @@ const { t } = useI18n(Astro.currentLocale);
 
 <footer class="footer">
   <div class="wrap row">
-    <span class="mono faint">&copy; {new Date().getFullYear()} {t('footer.team')} {site.team}, FIIT STU</span>
+    <span class="mono faint" id="copyright">&copy; {new Date().getFullYear()} {t('footer.team')} {site.team}, FIIT STU</span>
     <div class="lockup">
       <a href={site.github} rel="noopener">
         <Image src={icon} alt="NAOMI on GitHub" height={36} densities={[1, 2]} />
@@ -21,7 +22,22 @@ const { t } = useI18n(Astro.currentLocale);
     </div>
     <a class="mono faint top" href="#top">{t('footer.top')} &uarr;</a>
   </div>
+  <Wordle />
 </footer>
+
+<script>
+  // 5 quick clicks toggle the hidden game
+  let clicks = 0;
+  let timer: number | undefined;
+  document.getElementById('copyright')!.addEventListener('click', () => {
+    clearTimeout(timer);
+    if (++clicks === 5) {
+      clicks = 0;
+      window.dispatchEvent(new Event('wordle:toggle'));
+    }
+    timer = window.setTimeout(() => (clicks = 0), 1000);
+  });
+</script>
 
 <style>
   .footer {
@@ -50,6 +66,10 @@ const { t } = useI18n(Astro.currentLocale);
 
   .lockup a:last-child img {
     height: 32px;
+  }
+
+  #copyright {
+    user-select: none;
   }
 
   .top {
