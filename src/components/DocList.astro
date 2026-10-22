@@ -5,6 +5,7 @@ export interface DocItem {
   title: string;
   date?: Date;
   file?: string;
+  label?: string;
 }
 
 interface Props {
@@ -23,22 +24,23 @@ const isoDate = (date: Date) => date.toISOString().slice(0, 10);
   <h3 class="mono">{heading}<span class="faint">{String(items.length).padStart(2, '0')}</span></h3>
   <ul>
     {
-      items.map((item) => (
-        <li class:list={{ pending: !item.file }}>
-          {item.file ? (
-            <a class="title" href={href(item.file)} target="_blank" rel="noopener">
-              {item.title}
-            </a>
-          ) : (
-            <span class="title">{item.title}</span>
-          )}
-          <span class="leader" aria-hidden="true" />
-          <span class="mono meta">
-            {!item.file && <span class="faint">{t('reports.pending')}</span>}
-            {item.date && <time datetime={isoDate(item.date)}>{isoDate(item.date)}</time>}
-          </span>
-        </li>
-      ))
+      items.map((item) => {
+        const Row = item.file ? 'a' : 'div';
+        const link = item.file && { href: href(item.file), target: '_blank', rel: 'noopener' };
+        return (
+          <li class:list={{ pending: !item.file }}>
+            <Row class="row" {...link}>
+              <span class="title">{item.title}</span>
+              <span class="leader" aria-hidden="true" />
+              <span class="mono meta">
+                {!item.file && <span class="faint">{t('reports.pending')}</span>}
+                {item.date && <time datetime={isoDate(item.date)}>{isoDate(item.date)}</time>}
+                {item.file && <span class="faint">{item.label} ↗</span>}
+              </span>
+            </Row>
+          </li>
+        );
+      })
     }
   </ul>
 </div>
@@ -60,7 +62,7 @@ const isoDate = (date: Date) => date.toISOString().slice(0, 10);
     letter-spacing: 0.06em;
   }
 
-  li {
+  .row {
     display: flex;
     align-items: baseline;
     gap: 10px;
@@ -71,12 +73,24 @@ const isoDate = (date: Date) => date.toISOString().slice(0, 10);
     line-height: 1.4;
   }
 
-  a.title {
+  a.row {
+    color: inherit;
     text-decoration: none;
   }
 
-  a.title:hover {
-    text-decoration: underline;
+  a.row,
+  a.row .faint,
+  a.row .leader {
+    transition: color 150ms, border-color 150ms;
+  }
+
+  a.row:hover,
+  a.row:hover .faint {
+    color: var(--c-accent);
+  }
+
+  a.row:hover .leader {
+    border-color: var(--c-accent);
   }
 
   .pending .title {

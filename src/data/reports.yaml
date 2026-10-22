@@ -1,7 +1,13 @@
-# kind: sprint | meeting | other; file: public/docs/ or url, none = pending
+# kind: sprint | meeting | other; file: public/docs/ or url, none = pending; label: shown next to the link
 
-- id: sprint-01
+- id: sprint-00-report
   kind: sprint
   title:
-    en: Sprint 01 report
-    sk: Správa zo šprintu 01
+    en: Sprint 0 report
+    sk: Správa zo šprintu 0
+
+- id: sprint-00-retrospective
+  kind: sprint
+  title:
+    en: Sprint 0 retrospective
+    sk: Retrospektíva šprintu 0

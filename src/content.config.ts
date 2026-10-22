@@ -17,6 +17,7 @@ const document = {
   title: localized,
   date: z.coerce.date().optional(),
   file: z.string().optional(),
+  label: z.string().optional(),
 };
 
 const team = defineCollection({

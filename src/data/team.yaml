@@ -7,6 +7,13 @@
   titleAfter: PhD.
   role: { en: Product Owner, sk: Product Owner }
 
+- id: lehocki
+  titleBefore: doc. Ing.
+  name: Fedor
+  surname: Lehocki
+  titleAfter: PhD.
+  role: { en: Product Owner, sk: Product Owner }
+
 - id: gainetdinov
   name: Ruslan
   surname: Gainetdinov
@@ -22,14 +29,14 @@
   surname: Dmitriev
   role: { en: Software Engineer, sk: Software Engineer }
 
-- id: danilov
-  name: Denis
-  surname: Danilov
-  role: { en: Software Engineer, sk: Software Engineer }
-
 - id: kuzin
   name: Timofei
   surname: Kuzin
+  role: { en: Software Engineer, sk: Software Engineer }
+
+- id: danilov
+  name: Denis
+  surname: Danilov
   role: { en: Lab Test Engineer, sk: Lab Test Engineer }
 
 - id: tikhoblazhenko
