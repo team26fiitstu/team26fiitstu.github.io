@@ -32,6 +32,14 @@
   file: docs/version-control-methodology.pdf
   label: PDF
 
+- id: methodology-definition-of-done
+  group: methodology
+  title:
+    en: Definition of done
+    sk: Definícia dokončenia
+  file: docs/definition-of-done.pdf
+  label: PDF
+
 - id: deliverable-description
   group: deliverable
   title:
