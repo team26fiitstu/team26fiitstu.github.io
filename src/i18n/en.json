@@ -38,18 +38,21 @@
   },
   "reports": {
     "title": "Reports",
-    "intro": "Sprint reports and meeting minutes.",
+    "intro": "Sprint reports, meeting minutes, retrospectives, and progress reports.",
     "sprint": "Sprint",
     "meeting": "Meeting",
+    "retrospective": "Retrospectives",
+    "progress": "Progress reports",
     "other": "Other",
     "pending": "Pending",
     "empty": "Nothing here yet."
   },
   "documents": {
     "title": "Documents",
-    "intro": "Methodologies we follow, analyses and project deliverables.",
+    "intro": "Methodologies, handbooks, analyses, and project deliverables.",
     "methodology": "Methodologies",
     "analysis": "Analyses",
+    "handbook": "Handbooks",
     "deliverable": "Deliverables"
   },
   "team": {

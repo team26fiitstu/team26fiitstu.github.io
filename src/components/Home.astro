@@ -12,6 +12,8 @@ import { useI18n } from '../i18n';
 const { locale, t } = useI18n(Astro.currentLocale);
 
 type Entry = { title: Record<typeof locale, string>; date?: Date; file?: string };
+type ReportKind = 'sprint' | 'meeting' | 'retrospective' | 'progress' | 'other';
+type DocumentKind = 'methodology' | 'analysis' | 'deliverable' | 'handbook';
 
 function groupBy<E extends Entry, K extends string>(entries: E[], kinds: readonly K[], kindOf: (e: E) => K) {
   return kinds
@@ -23,13 +25,37 @@ function groupBy<E extends Entry, K extends string>(entries: E[], kinds: readonl
 }
 
 // newest first, undated last
-const reports = (await getOrdered('reports'))
-  .map(({ data }) => data)
-  .sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
-const documents = (await getOrdered('documents')).map(({ data }) => data);
+const published = (await getOrdered('published')).map(({ id, data }) => ({
+  id,
+  title: data.name,
+  date: data.date,
+  file: data.pdf,
+  label: 'PDF',
+  type: data.type,
+}));
+const publishedIds = new Set(published.map(({ id }) => id));
+const publishedFiles = new Set(published.map(({ file }) => file));
 
-const reportGroups = groupBy(reports, ['sprint', 'meeting', 'other'], (r) => r.kind);
-const documentGroups = groupBy(documents, ['methodology', 'analysis', 'deliverable'], (d) => d.group);
+const reports = [
+  ...(await getOrdered('reports'))
+    .filter(({ id }) => !publishedIds.has(id))
+    .map(({ data }) => data),
+  ...published
+    .filter(({ type }) => ['meeting', 'retrospective', 'progress'].includes(type))
+    .map((entry) => ({ ...entry, kind: entry.type as ReportKind })),
+]
+  .sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
+const documents = [
+  ...(await getOrdered('documents'))
+    .filter(({ data }) => !data.file || !publishedFiles.has(data.file))
+    .map(({ data }) => data),
+  ...published
+    .filter(({ type }) => ['methodology', 'handbook', 'deliverable'].includes(type))
+    .map((entry) => ({ ...entry, group: entry.type as DocumentKind })),
+];
+
+const reportGroups = groupBy(reports, ['sprint', 'meeting', 'retrospective', 'progress', 'other'], (r) => r.kind);
+const documentGroups = groupBy(documents, ['methodology', 'analysis', 'handbook', 'deliverable'], (d) => d.group);
 ---
 
 <Base>

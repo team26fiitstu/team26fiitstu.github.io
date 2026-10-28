@@ -26,6 +26,7 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm ci
+      - run: npm run check:documents
       - run: npm run build
         env:
           SITE: ${{ steps.pages.outputs.origin }}

@@ -54,4 +54,17 @@ const documents = defineCollection({
   schema: z.object({ ...document, group: z.enum(['methodology', 'analysis', 'deliverable']) }),
 });
 
-export const collections = { team, progress, reports, documents };
+const published = defineCollection({
+  loader: file('public/documents.json', {
+    parser: (text) => JSON.parse(text).documents.map((entry: object, order: number) => ({ ...entry, order })),
+  }),
+  schema: z.object({
+    order: z.number(),
+    name: localized,
+    type: z.enum(['meeting', 'retrospective', 'progress', 'methodology', 'handbook', 'deliverable']),
+    date: z.coerce.date(),
+    pdf: z.string(),
+  }),
+});
+
+export const collections = { team, progress, reports, documents, published };
