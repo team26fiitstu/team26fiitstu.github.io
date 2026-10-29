@@ -8,7 +8,7 @@
         "sk": "Opis projektu a ciele"
       },
       "type": "deliverable",
-      "date": "2026-10-23",
+      "date": "2026-10-29",
       "pdf": "docs/project-description-goals.pdf"
     },
     {
@@ -18,7 +18,7 @@
         "sk": "Metodika správy backlogu"
       },
       "type": "methodology",
-      "date": "2026-10-23",
+      "date": "2026-10-29",
       "pdf": "docs/backlog-management-methodology.pdf"
     },
     {
@@ -28,7 +28,7 @@
         "sk": "Definícia dokončenia"
       },
       "type": "methodology",
-      "date": "2026-10-23",
+      "date": "2026-10-29",
       "pdf": "docs/definition-of-done.pdf"
     },
     {
@@ -38,7 +38,7 @@
         "sk": "Metodika dokumentácie"
       },
       "type": "methodology",
-      "date": "2026-10-23",
+      "date": "2026-10-29",
       "pdf": "docs/documentation-methodology.pdf"
     },
     {
@@ -48,7 +48,7 @@
         "sk": "Technická metodika"
       },
       "type": "methodology",
-      "date": "2026-10-23",
+      "date": "2026-10-29",
       "pdf": "docs/technical-methodology.pdf"
     },
     {
@@ -58,7 +58,7 @@
         "sk": "Metodika správy verzií"
       },
       "type": "methodology",
-      "date": "2026-10-23",
+      "date": "2026-10-29",
       "pdf": "docs/version-control-methodology.pdf"
     }
   ]
