@@ -20,8 +20,9 @@ Most changes do not touch any component.
 |---|---|
 | Team members, roles, photos | `src/data/team.yaml` (photos go to `public/team/`) |
 | Progress timeline | `src/data/progress.yaml` |
-| Sprint reports, meeting minutes | `src/data/reports.yaml` (PDFs go to `public/docs/`) |
-| Methodologies and other documents | `src/data/documents.yaml` (PDFs go to `public/docs/`) |
+| Website-managed reports and pending entries | `src/data/reports.yaml` (PDFs go to `public/docs/`) |
+| Website-managed documents | `src/data/documents.yaml` (PDFs go to `public/docs/`) |
+| LaTeX documents published from `naomi-documents` | `public/documents.json` and PDF files in `public/docs/` (generated automatically) |
 | Interface texts in English / Slovak | `src/i18n/en.json`, `src/i18n/sk.json` |
 | Email, team number, map location | `src/site.ts` |
 
@@ -58,3 +59,7 @@ brand/                source files of logos, fonts and illustrations (not used b
 ## Deployment
 
 Every push to `main` builds and publishes the site via `.github/workflows/deploy.yml`.
+
+The documents repository compiles LaTeX, updates `public/documents.json` and its PDFs here, and commits only changed generated files. The index supplies the name, type, date, and PDF link; the Astro build groups documents by type. `src/data/documents.yaml` and `src/data/reports.yaml` retain entries maintained directly on the website. Do not duplicate a generated document in these YAML files.
+
+Website pull requests run `.github/workflows/validate.yml`. Locally, run `npm run check:documents` to verify every local PDF link and the generated index before `npm run build`.

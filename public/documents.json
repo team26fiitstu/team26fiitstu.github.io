@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "documents": [
+    {
+      "id": "project-description-goals",
+      "name": {
+        "en": "Project description and goals",
+        "sk": "Opis projektu a ciele"
+      },
+      "type": "deliverable",
+      "date": "2026-10-23",
+      "pdf": "docs/project-description-goals.pdf"
+    },
+    {
+      "id": "backlog-management-methodology",
+      "name": {
+        "en": "Backlog management methodology",
+        "sk": "Metodika správy backlogu"
+      },
+      "type": "methodology",
+      "date": "2026-10-23",
+      "pdf": "docs/backlog-management-methodology.pdf"
+    },
+    {
+      "id": "definition-of-done",
+      "name": {
+        "en": "Definition of done",
+        "sk": "Definícia dokončenia"
+      },
+      "type": "methodology",
+      "date": "2026-10-23",
+      "pdf": "docs/definition-of-done.pdf"
+    },
+    {
+      "id": "documentation-methodology",
+      "name": {
+        "en": "Documentation methodology",
+        "sk": "Metodika dokumentácie"
+      },
+      "type": "methodology",
+      "date": "2026-10-23",
+      "pdf": "docs/documentation-methodology.pdf"
+    },
+    {
+      "id": "technical-methodology",
+      "name": {
+        "en": "Technical methodology",
+        "sk": "Technická metodika"
+      },
+      "type": "methodology",
+      "date": "2026-10-23",
+      "pdf": "docs/technical-methodology.pdf"
+    },
+    {
+      "id": "version-control-methodology",
+      "name": {
+        "en": "Version control methodology",
+        "sk": "Metodika správy verzií"
+      },
+      "type": "methodology",
+      "date": "2026-10-23",
+      "pdf": "docs/version-control-methodology.pdf"
+    }
+  ]
+}

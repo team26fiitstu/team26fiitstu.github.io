@@ -38,18 +38,21 @@
   },
   "reports": {
     "title": "Správy",
-    "intro": "Správy zo šprintov a zápisnice zo stretnutí.",
+    "intro": "Správy zo šprintov, zápisnice, retrospektívy a správy o priebehu.",
     "sprint": "Šprint",
     "meeting": "Stretnutie",
+    "retrospective": "Retrospektívy",
+    "progress": "Správy o priebehu",
     "other": "Iné",
     "pending": "Pripravujeme",
     "empty": "Zatiaľ tu nič nie je."
   },
   "documents": {
     "title": "Dokumenty",
-    "intro": "Metodiky, ktorými sa riadime, analýzy a výstupy projektu.",
+    "intro": "Metodiky, príručky, analýzy a výstupy projektu.",
     "methodology": "Metodiky",
     "analysis": "Analýzy",
+    "handbook": "Príručky",
     "deliverable": "Výstupy"
   },
   "team": {
