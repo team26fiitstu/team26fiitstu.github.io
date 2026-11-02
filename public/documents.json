@@ -60,6 +60,26 @@
       "type": "methodology",
       "date": "2026-10-29",
       "pdf": "docs/version-control-methodology.pdf"
+    },
+    {
+      "id": "sprint-0-progress-report",
+      "name": {
+        "en": "Sprint 0 progress report",
+        "sk": "Progres tímu za šprint 0"
+      },
+      "type": "progress",
+      "date": "2026-10-25",
+      "pdf": "docs/sprint-0-progress-report.pdf"
+    },
+    {
+      "id": "sprint-0-retrospective",
+      "name": {
+        "en": "Sprint 0 retrospective",
+        "sk": "Retrospektíva šprintu 0"
+      },
+      "type": "retrospective",
+      "date": "2026-10-26",
+      "pdf": "docs/sprint-0-retrospective.pdf"
     }
   ]
 }
