@@ -14,4 +14,12 @@
   title:
     en: 'Sprint 0: Preparatory phase'
     sk: 'Šprint 0: Prípravná fáza'
+  status: done
+
+- id: sprint-01
+  semester: winter
+  week: 7
+  title:
+    en: 'Sprint 1: Codebase stabilization'
+    sk: 'Šprint 1: Stabilizácia kódu'
   status: current

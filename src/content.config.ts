@@ -6,7 +6,7 @@ import { parse } from 'yaml';
 // keep yaml order
 const ordered = (path: string) =>
   file(path, {
-    parser: (text) => parse(text).map((entry: object, order: number) => ({ ...entry, order })),
+    parser: (text) => (parse(text) ?? []).map((entry: object, order: number) => ({ ...entry, order })),
   });
 
 const localized = z.object({ en: z.string(), sk: z.string() });
