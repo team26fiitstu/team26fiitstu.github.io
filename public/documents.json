@@ -2,6 +2,16 @@
   "schemaVersion": 1,
   "documents": [
     {
+      "id": "multi-state-choreography-design",
+      "name": {
+        "en": "Multi-state choreography design",
+        "sk": "Návrh viacstavových choreografií"
+      },
+      "type": "deliverable",
+      "date": "2026-11-17",
+      "pdf": "docs/multi-state-choreography-design.pdf"
+    },
+    {
       "id": "project-description-goals",
       "name": {
         "en": "Project description and goals",
