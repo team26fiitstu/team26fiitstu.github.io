@@ -22,6 +22,16 @@
       "pdf": "docs/project-description-goals.pdf"
     },
     {
+      "id": "robot-lab-safety-handbook",
+      "name": {
+        "en": "Robot lab safety and test record handbook",
+        "sk": "Príručka bezpečnej práce s robotom a záznamov testov"
+      },
+      "type": "handbook",
+      "date": "2026-11-21",
+      "pdf": "docs/robot-lab-safety-handbook.pdf"
+    },
+    {
       "id": "backlog-management-methodology",
       "name": {
         "en": "Backlog management methodology",
@@ -58,7 +68,7 @@
         "sk": "Technická metodika"
       },
       "type": "methodology",
-      "date": "2026-10-29",
+      "date": "2026-11-21",
       "pdf": "docs/technical-methodology.pdf"
     },
     {
@@ -68,7 +78,7 @@
         "sk": "Metodika správy verzií"
       },
       "type": "methodology",
-      "date": "2026-10-29",
+      "date": "2026-11-21",
       "pdf": "docs/version-control-methodology.pdf"
     },
     {
