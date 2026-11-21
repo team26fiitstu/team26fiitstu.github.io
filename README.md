@@ -28,6 +28,8 @@ Most changes do not touch any component.
 
 Each YAML file explains its fields at the top. Entries appear on the site in the order they are written.
 
+At the end of each sprint, the scrum master prepares the sprint documents, which the `naomi-documents` pipeline publishes to this repository. The repository owner then updates the roadmap in `src/data/progress.yaml`: the finished sprint becomes `done` and the next one `current`.
+
 Adding a report:
 
 ```yaml

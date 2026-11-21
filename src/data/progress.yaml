@@ -1,4 +1,5 @@
 # semester: winter | summer; status: done | current | planned, one current
+# end of sprint: scrum master publishes documents via naomi-documents, repo owner marks the sprint done and the next one current
 
 - id: kickoff
   semester: winter
@@ -22,4 +23,68 @@
   title:
     en: 'Sprint 1: Codebase stabilization'
     sk: 'Šprint 1: Stabilizácia kódu'
+  status: done
+
+- id: sprint-02
+  semester: winter
+  week: 9
+  title:
+    en: 'Sprint 2: Refactoring and choreography groundwork'
+    sk: 'Šprint 2: Refaktoring a základy choreografie'
   status: current
+
+- id: sprint-03
+  semester: winter
+  week: 11
+  title:
+    en: 'Sprint 3: Multi-state choreography'
+    sk: 'Šprint 3: Viacstavová choreografia'
+  status: planned
+
+- id: sprint-04
+  semester: summer
+  week: 1
+  title:
+    en: 'Sprint 4: To be planned'
+    sk: 'Šprint 4: Bude upresnené'
+  status: planned
+
+- id: sprint-05
+  semester: summer
+  week: 3
+  title:
+    en: 'Sprint 5: To be planned'
+    sk: 'Šprint 5: Bude upresnené'
+  status: planned
+
+- id: sprint-06
+  semester: summer
+  week: 5
+  title:
+    en: 'Sprint 6: To be planned'
+    sk: 'Šprint 6: Bude upresnené'
+  status: planned
+
+- id: sprint-07
+  semester: summer
+  week: 7
+  title:
+    en: 'Sprint 7: To be planned'
+    sk: 'Šprint 7: Bude upresnené'
+  status: planned
+
+- id: sprint-08
+  semester: summer
+  week: 9
+  title:
+    en: 'Sprint 8: To be planned'
+    sk: 'Šprint 8: Bude upresnené'
+  status: planned
+
+- id: sprint-09
+  semester: summer
+  week: 11
+  title:
+    en: 'Sprint 9: To be planned'
+    sk: 'Šprint 9: Bude upresnené'
+  status: planned
